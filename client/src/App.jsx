@@ -3,6 +3,8 @@ import AuthPage from "./pages/auth";
 import RouteGuard from "./components/route-guard";
 import { useContext } from "react";
 import { AuthContext } from "./context/auth-context";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import InstructorDashboardpage from "./pages/instructor";
 import StudentViewCommonLayout from "./components/student-view/common-layout";
 import StudentHomePage from "./pages/student/home";
@@ -13,12 +15,18 @@ import StudentViewCourseDetailsPage from "./pages/student/course-details";
 import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
+import Quiz from "./components/student-view/quiz";
+import Result from "./components/student-view/result";
+import CertificateGenerator from "./components/student-view/certificate";
 
 function App() {
   const { auth } = useContext(AuthContext);
 
   return (
-    <Routes>
+    <>
+          <ToastContainer position="top-center" autoClose={2000} />
+
+       <Routes>
       <Route
         path="/auth"
         element={
@@ -72,6 +80,11 @@ function App() {
         <Route path="" element={<StudentHomePage />} />
         <Route path="home" element={<StudentHomePage />} />
         <Route path="courses" element={<StudentViewCoursesPage />} />
+        <Route path="quiz" element={<Quiz />} />
+        <Route path="result" element={<Result />} />
+        <Route path="certificate" element={<CertificateGenerator />} />
+
+
         <Route
           path="course/details/:id"
           element={<StudentViewCourseDetailsPage />}
@@ -85,6 +98,8 @@ function App() {
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
+    </>
+ 
   );
 }
 

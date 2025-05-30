@@ -1,19 +1,40 @@
 import axiosInstance from "@/api/axiosInstance";
 
-export async function registerService(formData) {
-  const { data } = await axiosInstance.post("/auth/register", {
-    ...formData,
-    role: "user",
-  });
+export async function registerService(payload) {
+  try {
+    const res = await axiosInstance.post("/auth/register", payload, {
 
-  return data;
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res)
+    return res.data;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Something went wrong",
+    };
+  }
 }
 
-export async function loginService(formData) {
-  const { data } = await axiosInstance.post("/auth/login", formData);
+export const loginService = async (payload) => {
+  try {
+    const res = await axiosInstance.post("/auth/login", payload, {
 
-  return data;
-}
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res)
+    return res.data;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Something went wrong",
+    };
+  }
+};
 
 export async function checkAuthService() {
   const { data } = await axiosInstance.get("/auth/check-auth");
@@ -101,7 +122,17 @@ export async function checkCoursePurchaseInfoService(courseId, studentId) {
     `/student/course/purchase-info/${courseId}/${studentId}`
   );
 
-  return data;
+  try {
+    const res = await axiosInstance.get(`/student/course/purchase-info/${courseId}/${studentId}`);
+    console.log(res)
+    return res.data;
+  } catch (error) {
+    return {
+      success: false,
+      message: error.response?.data?.message || "Something went wrong",
+    };
+  }
+
 }
 
 export async function createPaymentService(formData) {

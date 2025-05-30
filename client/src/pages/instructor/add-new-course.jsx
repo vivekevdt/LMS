@@ -32,7 +32,6 @@ function AddNewCoursePage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  console.log(params);
 
   function isEmpty(value) {
     if (Array.isArray(value)) {
@@ -94,7 +93,6 @@ function AddNewCoursePage() {
       setCurrentEditedCourseId(null);
     }
 
-    console.log(courseFinalFormData, "courseFinalFormData");
   }
 
   async function fetchCurrentCourseDetails() {
@@ -111,12 +109,10 @@ function AddNewCoursePage() {
         return acc;
       }, {});
 
-      console.log(setCourseFormData, response?.data, "setCourseFormData");
       setCourseLandingFormData(setCourseFormData);
       setCourseCurriculumFormData(response?.data?.curriculum);
     }
 
-    console.log(response, "response");
   }
 
   useEffect(() => {
@@ -127,7 +123,6 @@ function AddNewCoursePage() {
     if (params?.courseId) setCurrentEditedCourseId(params?.courseId);
   }, [params?.courseId]);
 
-  console.log(params, currentEditedCourseId, "params");
 
   return (
     <div className="container mx-auto p-4">

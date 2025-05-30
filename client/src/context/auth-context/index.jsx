@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config";
+import { toast } from 'react-toastify'; 
 import { checkAuthService, loginService, registerService } from "@/services";
 import { createContext, useEffect, useState } from "react";
 
@@ -17,14 +18,26 @@ export default function AuthProvider({ children }) {
   async function handleRegisterUser(event) {
     event.preventDefault();
     const data = await registerService(signUpFormData);
+    console.log(data)
+    if (data.success) {
+      toast.success('User created successfully');
+    }
+    else{
+      toast.error('User already exist');
+
+
+    }
   }
 
   async function handleLoginUser(event) {
     event.preventDefault();
     const data = await loginService(signInFormData);
-    console.log(data, "datadatadatadatadata");
+    console.log(data)
 
     if (data.success) {
+      toast.success("Login Successful");
+
+
       sessionStorage.setItem(
         "accessToken",
         JSON.stringify(data.data.accessToken)
@@ -33,7 +46,10 @@ export default function AuthProvider({ children }) {
         authenticate: true,
         user: data.data.user,
       });
+
     } else {
+
+      toast.error("Login Failed")
       setAuth({
         authenticate: false,
         user: null,
@@ -82,7 +98,6 @@ export default function AuthProvider({ children }) {
     checkAuthUser();
   }, []);
 
-  console.log(auth, "gf");
 
   return (
     <AuthContext.Provider

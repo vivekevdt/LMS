@@ -59,7 +59,6 @@ function StudentViewCourseProgressPage() {
         if (response?.data?.progress?.length === 0) {
           setCurrentLecture(response?.data?.courseDetails?.curriculum[0]);
         } else {
-          console.log("logging here");
           const lastIndexOfViewedAsTrue = response?.data?.progress.reduceRight(
             (acc, obj, index) => {
               return acc === -1 && obj.viewed ? index : acc;
@@ -105,6 +104,11 @@ function StudentViewCourseProgressPage() {
     }
   }
 
+  async function getCertificate() {
+    navigate("/quiz")
+  }
+
+
   useEffect(() => {
     fetchCurrentCourseProgress();
   }, [id]);
@@ -117,7 +121,6 @@ function StudentViewCourseProgressPage() {
     if (showConfetti) setTimeout(() => setShowConfetti(false), 15000);
   }, [showConfetti]);
 
-  console.log(currentLecture, "currentLecture");
 
   return (
     <div className="flex flex-col h-screen bg-[#1c1d1f] text-white">
@@ -239,6 +242,7 @@ function StudentViewCourseProgressPage() {
                   My Courses Page
                 </Button>
                 <Button onClick={handleRewatchCourse}>Rewatch Course</Button>
+                <Button onClick={getCertificate}>Get Your Certificate</Button>
               </div>
             </DialogDescription>
           </DialogHeader>
