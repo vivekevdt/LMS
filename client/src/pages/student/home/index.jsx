@@ -41,50 +41,12 @@ function StudentHomePage() {
     isNavigatingRef.current = true; // Lock it
     const today = new Date().toISOString().split('T')[0];
 
-      const bought = await checkCoursePurchaseInfoService(courseItem._id,auth?.user?._id);
-      console.log(bought)
+  
 
-      if (bought?.data === true) {
-        navigate(`/course-progress/${courseItem?._id}`);
-      }
-      else{
-        console.log("not buy")
-        const payload = {
-          userId: auth?.user?._id,
-          userName: auth?.user?.userName,
-          userEmail: auth?.user?.userEmail,
-          orderStatus: "paid",
-          orderDate: today,
-          instructorId: courseItem?.instructorId,
-          instructorName: courseItem?.instructorName,
-          courseImage: courseItem?.image,
-          courseTitle: courseItem?.title,
-          courseId: courseItem?._id,
-        }
-        try {
-          const orderResponse = await createOrder(payload);
-    
-          if (orderResponse?.success) {
-            const orderId = orderResponse?.data?.orderId;
-    
-            const paymentResponse = await captureAndFinalizePaymentService(orderId);
-    
-            if (paymentResponse?.success) {
-              console.log("Payment finalized:", paymentResponse?.data);
-            } else {
-              console.error("Payment failed:", paymentResponse);
-            }
-          } else {
-            console.error("Order creation failed:", orderResponse);
-          }
-        } catch (error) {
-          console.error("Something went wrong:", error);
-        }
 
         navigate(`/course/details/${courseItem._id}`);
 
-      }
-    
+     
 
  
   

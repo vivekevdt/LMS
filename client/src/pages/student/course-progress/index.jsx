@@ -4,8 +4,6 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -52,24 +50,19 @@ function StudentViewCourseProgressPage() {
           setCurrentLecture(response?.data?.courseDetails?.curriculum[0]);
           setShowCourseCompleteDialog(true);
           setShowConfetti(true);
-
           return;
         }
 
         if (response?.data?.progress?.length === 0) {
           setCurrentLecture(response?.data?.courseDetails?.curriculum[0]);
         } else {
-          const lastIndexOfViewedAsTrue = response?.data?.progress.reduceRight(
-            (acc, obj, index) => {
-              return acc === -1 && obj.viewed ? index : acc;
-            },
+          const lastIndex = response?.data?.progress.reduceRight(
+            (acc, obj, index) => (acc === -1 && obj.viewed ? index : acc),
             -1
           );
 
           setCurrentLecture(
-            response?.data?.courseDetails?.curriculum[
-              lastIndexOfViewedAsTrue + 1
-            ]
+            response?.data?.courseDetails?.curriculum[lastIndex + 1]
           );
         }
       }
@@ -83,7 +76,6 @@ function StudentViewCourseProgressPage() {
         studentCurrentCourseProgress?.courseDetails?._id,
         currentLecture._id
       );
-
       if (response?.success) {
         fetchCurrentCourseProgress();
       }
@@ -95,7 +87,6 @@ function StudentViewCourseProgressPage() {
       auth?.user?._id,
       studentCurrentCourseProgress?.courseDetails?._id
     );
-
     if (response?.success) {
       setCurrentLecture(null);
       setShowConfetti(false);
@@ -105,9 +96,8 @@ function StudentViewCourseProgressPage() {
   }
 
   async function getCertificate() {
-    navigate("/quiz")
+    navigate("/quiz");
   }
-
 
   useEffect(() => {
     fetchCurrentCourseProgress();
@@ -121,26 +111,34 @@ function StudentViewCourseProgressPage() {
     if (showConfetti) setTimeout(() => setShowConfetti(false), 15000);
   }, [showConfetti]);
 
-
   return (
-    <div className="flex flex-col h-screen bg-[#1c1d1f] text-white">
-      {showConfetti && <Confetti />}
-      <div className="flex items-center justify-between p-4 bg-[#1c1d1f] border-b border-gray-700">
+    <div className="flex flex-col h-screen bg-black text-white font-sans relative">
+      {showConfetti && (
+        <div className="pointer-events-none z-50 absolute inset-0">
+          <Confetti />
+        </div>
+      )}
+
+      {/* Top Nav */}
+      <div className="flex items-center justify-between p-4 bg-black/30 backdrop-blur-md border-b border-white/10 shadow-sm">
         <div className="flex items-center space-x-4">
           <Button
-            onClick={() => navigate("/student-courses")}
-            className="text-black"
+            onClick={() => navigate(-1)}
+            className="bg-transparent hover:bg-white/10 text-white border border-white/20"
             variant="ghost"
             size="sm"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
-            Back to My Courses Page
+            Back to Course page
           </Button>
-          <h1 className="text-lg font-bold hidden md:block">
+          <h1 className="text-lg font-semibold hidden md:block tracking-wide">
             {studentCurrentCourseProgress?.courseDetails?.title}
           </h1>
         </div>
-        <Button onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
+        <Button
+          className="bg-transparent hover:bg-white/10 text-white border border-white/20"
+          onClick={() => setIsSideBarOpen(!isSideBarOpen)}
+        >
           {isSideBarOpen ? (
             <ChevronRight className="h-5 w-5" />
           ) : (
@@ -148,11 +146,12 @@ function StudentViewCourseProgressPage() {
           )}
         </Button>
       </div>
+
+      {/* Main Section */}
       <div className="flex flex-1 overflow-hidden">
+        {/* Video Area */}
         <div
-          className={`flex-1 ${
-            isSideBarOpen ? "mr-[400px]" : ""
-          } transition-all duration-300`}
+          className={`flex-1 ${isSideBarOpen ? "mr-[400px]" : ""} transition-all duration-300`}
         >
           <VideoPlayer
             width="100%"
@@ -161,88 +160,109 @@ function StudentViewCourseProgressPage() {
             onProgressUpdate={setCurrentLecture}
             progressData={currentLecture}
           />
-          <div className="p-6 bg-[#1c1d1f]">
+          <div className="p-6 bg-black/40 backdrop-blur-sm rounded-t-xl shadow-xl">
             <h2 className="text-2xl font-bold mb-2">{currentLecture?.title}</h2>
           </div>
         </div>
+
+        {/* Sidebar */}
         <div
-          className={`fixed top-[64px] right-0 bottom-0 w-[400px] bg-[#1c1d1f] border-l border-gray-700 transition-all duration-300 ${
+          className={`fixed top-[64px] right-0 bottom-0 w-[400px] bg-black/40 backdrop-blur-md border-l border-white/10 shadow-lg transition-transform duration-500 ${
             isSideBarOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           <Tabs defaultValue="content" className="h-full flex flex-col">
-            <TabsList className="grid bg-[#1c1d1f] w-full grid-cols-2 p-0 h-14">
+            <TabsList className="grid w-full grid-cols-2 bg-black/30 border-b border-white/10 rounded-none text-white/90">
               <TabsTrigger
                 value="content"
-                className=" text-black rounded-none h-full"
+                className="hover:bg-white/10 transition-colors h-14"
               >
                 Course Content
               </TabsTrigger>
               <TabsTrigger
                 value="overview"
-                className=" text-black rounded-none h-full"
+                className="hover:bg-white/10 transition-colors h-14"
               >
                 Overview
               </TabsTrigger>
             </TabsList>
+
+            {/* Curriculum */}
             <TabsContent value="content">
-              <ScrollArea className="h-full">
-                <div className="p-4 space-y-4">
-                  {studentCurrentCourseProgress?.courseDetails?.curriculum.map(
-                    (item) => (
-                      <div
-                        className="flex items-center space-x-2 text-sm text-white font-bold cursor-pointer"
-                        key={item._id}
-                      >
-                        {studentCurrentCourseProgress?.progress?.find(
-                          (progressItem) => progressItem.lectureId === item._id
-                        )?.viewed ? (
-                          <Check className="h-4 w-4 text-green-500" />
-                        ) : (
-                          <Play className="h-4 w-4 " />
-                        )}
-                        <span>{item?.title}</span>
-                      </div>
-                    )
-                  )}
-                </div>
+              <ScrollArea className="h-full p-4 space-y-3">
+                {studentCurrentCourseProgress?.courseDetails?.curriculum.map((item) => {
+                  const viewed = studentCurrentCourseProgress?.progress?.find(
+                    (progressItem) => progressItem.lectureId === item._id
+                  )?.viewed;
+                  return (
+                    <div
+                      key={item._id}
+                      onClick={() => setCurrentLecture(item)}
+                      className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 hover:text-white/90 p-2 rounded-md transition-all duration-300"
+                    >
+                      {viewed ? (
+                        <Check className="h-4 w-4 text-green-400" />
+                      ) : (
+                        <Play className="h-4 w-4 text-white/70" />
+                      )}
+                      <span className="text-sm font-medium">{item?.title}</span>
+                    </div>
+                  );
+                })}
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="overview" className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full">
-                <div className="p-4">
-                  <h2 className="text-xl font-bold mb-4">About this course</h2>
-                  <p className="text-gray-400">
-                    {studentCurrentCourseProgress?.courseDetails?.description}
-                  </p>
-                </div>
+
+            {/* Overview */}
+            <TabsContent value="overview">
+              <ScrollArea className="h-full p-4">
+                <h2 className="text-xl font-semibold mb-2">About this course</h2>
+                <p className="text-white/70 leading-relaxed">
+                  {studentCurrentCourseProgress?.courseDetails?.description}
+                </p>
               </ScrollArea>
             </TabsContent>
           </Tabs>
         </div>
       </div>
+
+      {/* Locked Dialog */}
       <Dialog open={lockCourse}>
-        <DialogContent className="sm:w-[425px]">
+        <DialogContent className="sm:w-[425px] bg-black border border-white/20 text-white shadow-lg">
           <DialogHeader>
-            <DialogTitle>You can't view this page</DialogTitle>
+            <DialogTitle className="text-white">Access Denied</DialogTitle>
             <DialogDescription>
-              Please purchase this course to get access
+              Please purchase this course to get access.
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
+
+      {/* Completion Dialog */}
       <Dialog open={showCourseCompleteDialog}>
-        <DialogContent showOverlay={false} className="sm:w-[425px]">
+        <DialogContent className="sm:w-[425px] bg-black border border-white/20 text-white shadow-lg">
           <DialogHeader>
-            <DialogTitle>Congratulations!</DialogTitle>
-            <DialogDescription className="flex flex-col gap-3">
-              <Label>You have completed the course</Label>
-              <div className="flex flex-row gap-3">
-                <Button onClick={() => navigate("/student-courses")}>
+            <DialogTitle>🎉 Congratulations!</DialogTitle>
+            <DialogDescription className="flex flex-col gap-4">
+              <Label className="text-white">You have completed the course</Label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  onClick={() => navigate("/student-courses")}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold"
+                >
                   My Courses Page
                 </Button>
-                <Button onClick={handleRewatchCourse}>Rewatch Course</Button>
-                <Button onClick={getCertificate}>Get Your Certificate</Button>
+                <Button
+                  onClick={handleRewatchCourse}
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold"
+                >
+                  Rewatch Course
+                </Button>
+                <Button
+                  onClick={getCertificate}
+                  className="bg-amber-400 hover:bg-amber-500 text-black font-semibold"
+                >
+                  Get Certificate
+                </Button>
               </div>
             </DialogDescription>
           </DialogHeader>
