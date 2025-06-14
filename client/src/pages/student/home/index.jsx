@@ -1,5 +1,5 @@
 import { courseCategories } from "@/config";
-import banner from "../../../../public/banner-img.png";
+import VideoCarousel from "@/components/VideoCarousel";
 import { Button } from "@/components/ui/button";
 import { useContext, useEffect,useRef } from "react";
 import { StudentContext } from "@/context/student-context";
@@ -65,19 +65,9 @@ function StudentHomePage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
-        <div className="lg:w-1/2 lg:pr-12">
-          <h1 className="text-4xl font-bold mb-4">Learning thet gets you</h1>
-          <p className="text-xl">
-            Skills for your present and your future. Get Started with US
-          </p>
-        </div>
+       
         <div className="lg:w-full mb-8 lg:mb-0">
-          <img
-            src={banner}
-            width={600}
-            height={400}
-            className="w-full h-auto rounded-lg shadow-lg"
-          />
+            <VideoCarousel />
         </div>
       </section>
       <section className="py-8 px-4 lg:px-8 bg-gray-100">
@@ -102,7 +92,7 @@ function StudentHomePage() {
     studentViewCoursesList.map((courseItem) => (
       <div
         key={courseItem._id}
-        className="bg-white border rounded-xl shadow-lg overflow-hidden flex flex-col"
+        className="bg-white border rounded-xl shadow-2xl overflow-hidden flex flex-col"
       >
         <img
           src={courseItem?.image}
@@ -129,12 +119,12 @@ function StudentHomePage() {
             </p>
           )}
           <div className="flex items-center justify-between mt-auto">
-            <span className="text-lg font-semibold text-green-600">
+            {/* <span className="text-lg font-semibold text-green-600">
               ${courseItem?.pricing}
-            </span>
+            </span> */}
             <button
               onClick={() => handleCourseNavigate(courseItem)}
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              className="bg-black w-full text-white px-4 py-2 rounded hover:bg-blue-700 transition"
             >
               Go to Course
             </button>

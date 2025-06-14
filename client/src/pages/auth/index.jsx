@@ -9,7 +9,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signInFormControls, signUpFormControls } from "@/config";
 import { AuthContext } from "@/context/auth-context";
-import { GraduationCap } from "lucide-react";
+import logo from "../../assets/image/logo.jpg";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -50,8 +50,18 @@ function AuthPage() {
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center border-b">
         <Link to={"/"} className="flex items-center justify-center">
-          <GraduationCap className="h-8 w-8 mr-4" />
-          <span className="font-extrabold text-xl">LMS LEARN</span>
+          <img
+            src={logo}
+            alt="Logo"
+            className="h-12 w-12 mr-1 "
+          />
+          <span className="font-extrabold text-[20px] mr-1 md:text-2xl text-[#f6a818]">
+            Drive 
+          </span>
+            <span className="font-extrabold text-[20px] md:text-2xl text-black">
+            Ed.
+          </span>
+          
         </Link>
       </header>
       <div className="flex items-center justify-center min-h-screen bg-background">
