@@ -35,7 +35,7 @@ export default function AuthProvider({ children }) {
     console.log(data)
 
     if (data.success) {
-      toast.success("Login Successful");
+      toast.success("Welcome To Drive Ed!");
 
 
       sessionStorage.setItem(

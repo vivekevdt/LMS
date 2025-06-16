@@ -6,12 +6,12 @@ const Result = () => {
   const navigate = useNavigate();
 
   const score = location.state?.score || 0;
-  const passed = score >= 0;
+  const passed = score === 27;
 
   const handleDownload = () => {
     // For now, just alert or navigate to a dummy certificate page
     navigate("/certificate")
-    alert('Downloading Certificate...');
+    
   };
 
   return (
@@ -19,14 +19,14 @@ const Result = () => {
       <h1 className="text-4xl font-bold mb-4">
         {passed ? 'Congratulations! 🎉' : 'Try Again!'}
       </h1>
-      <p className="text-xl mb-6">Your Score: <span className="font-bold">{score}/20</span></p>
+      <p className="text-xl mb-6">Your Score: <span className="font-bold">{score}/30</span></p>
 
       {passed && (
         <button
           onClick={handleDownload}
           className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
         >
-          Download Certificate
+          Get Certificate
         </button>
       )}
 
@@ -34,7 +34,7 @@ const Result = () => {
         onClick={() => navigate('/')}
         className="mt-4 px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
       >
-        Go Back to Quiz
+        Go Back to Course again
       </button>
     </div>
   );
