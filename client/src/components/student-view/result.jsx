@@ -6,7 +6,7 @@ const Result = () => {
   const navigate = useNavigate();
 
   const score = location.state?.score || 0;
-  const passed = score === 27;
+  const passed = score >= 27;
 
   const handleDownload = () => {
     // For now, just alert or navigate to a dummy certificate page
