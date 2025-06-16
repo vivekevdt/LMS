@@ -48,11 +48,11 @@ function InstructorDashboard({ listOfCourses }) {
       label: "Total Students",
       value: calculateTotalStudentsAndProfit().totalStudents,
     },
-    {
-      icon: DollarSign,
-      label: "Total Revenue",
-      value: calculateTotalStudentsAndProfit().totalProfit,
-    },
+    // {
+    //   icon: DollarSign,
+    //   label: "Total Revenue",
+    //   value: calculateTotalStudentsAndProfit().totalProfit,
+    // },
   ];
 
   return (
